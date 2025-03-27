@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - SafeDrop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: #202124;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 48px 40px 36px;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .login-box, .password-box, .create-account-box, .forgot-email-box {
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 40px 40px;
+            margin-bottom: 16px;
+        }
+
+        .login-box h2, .password-box h2, .create-account-box h2, .forgot-email-box h2 {
+            font-size: 24px;
+            font-weight: 400;
+            margin: 0 0 10px;
+            text-align: center;
+        }
+
+        .login-box p, .create-account-box p, .forgot-email-box p {
+            text-align: center;
+            font-size: 16px;
+            color: #202124;
+            margin: 0 0 30px;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        input[type="email"], input[type="password"], input[type="text"], input[type="tel"] {
+            width: 100%;
+            padding: 13px 15px;
+            font-size: 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus, input[type="tel"]:focus {
+            border-color: #1a73e8;
+            outline: none;
+            box-shadow: 0 0 0 2px #e8f0fe;
+        }
+
+        .forgot-email, .forgot-password {
+            margin-bottom: 30px;
+        }
+
+        .forgot-email a, .forgot-password a, .back-to-login a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .forgot-email a:hover, .forgot-password a:hover, .back-to-login a:hover {
+            text-decoration: underline;
+        }
+
+        .disclaimer {
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 30px;
+        }
+
+        .disclaimer a {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .disclaimer a:hover {
+            text-decoration: underline;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .create-account, .back-to-login {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .create-account:hover, .back-to-login:hover {
+            text-decoration: underline;
+        }
+
+        .next-button, .signin-button, .submit-button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .next-button:hover, .signin-button:hover, .submit-button:hover {
+            background-color: #1765cc;
+        }
+
+        .password-box .header, .create-account-box .header, .forgot-email-box .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .password-box .back-button, .create-account-box .back-button, .forgot-email-box .back-button {
+            position: absolute;
+            left: 0;
+            top: 0;
+            cursor: pointer;
+            color: #1a73e8;
+            font-size: 20px;
+        }
+
+        #userEmail {
+            color: #202124;
+            font-weight: 500;
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .checkbox-container {
+            margin: 20px 0;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox-container input {
+            margin-right: 8px;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #5f6368;
+            margin-top: 20px;
+        }
+
+        .footer select {
+            padding: 5px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .footer .links a {
+            color: #5f6368;
+            text-decoration: none;
+            margin-left: 15px;
+        }
+
+        .footer .links a:hover {
+            text-decoration: underline;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .name-fields {
+            display: flex;
+            gap: 10px;
+        }
+
+        .name-fields .input-container {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="logoblack.png" alt="SafeDrop Logo">
+        </div>
+        
+        <!-- Login Box -->
+        <div class="login-box" id="loginBox">
+            <h2>Sign in</h2>
+            <p>to continue to SafeDrop</p>
+            
+            <form id="loginForm">
+                <div class="input-container">
+                    <input type="email" id="email" name="email" placeholder="Email or phone" autofocus>
+                </div>
+                
+                <div class="forgot-email">
+                    <a href="#" id="forgotEmailLink">Forgot email?</a>
+                </div>
+                
+                <div class="disclaimer">
+                    <p>Not your computer? Use Guest mode to sign in privately.</p>
+                    <a href="https://support.google.com/chrome/answer/6130773?hl=en">Learn more</a>
+                </div>
+                
+                <div class="actions">
+                    <a href="#" id="createAccountLink" class="create-account">Create account</a>
+                    <button type="button" class="next-button" id="nextButton">Next</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Password Box -->
+        <div class="password-box hidden" id="passwordBox">
+            <div class="header">
+                <div class="back-button" id="backToEmailButton">←</div>
+                <h2>Welcome</h2>
+                <div id="userEmail">user@example.com</div>
+            </div>
+            
+            <form id="passwordForm">
+                <div class="input-container">
+                    <input type="password" id="password" name="password" placeholder="Enter your password">
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#" id="forgotPasswordLink">Forgot password?</a>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="rememberMe">
+                    <label for="rememberMe">Remember me</label>
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="signin-button">Sign in</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Create Account Box -->
+        <div class="create-account-box hidden" id="createAccountBox">
+            <div class="header">
+                <div class="back-button" id="backToLoginFromCreateButton">←</div>
+                <h2>Create your SafeDrop Account</h2>
+            </div>
+            
+            <form id="createAccountForm">
+                <div class="name-fields">
+                    <div class="input-container">
+                        <input type="text" id="firstName" name="firstName" placeholder="First name" required>
+                    </div>
+                    <div class="input-container">
+                        <input type="text" id="lastName" name="lastName" placeholder="Last name" required>
+                    </div>
+                </div>
+                
+                <div class="input-container">
+                    <input type="email" id="newEmail" name="newEmail" placeholder="Email" required>
+                </div>
+                
+                <div class="input-container">
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Password (min 8 characters)" minlength="8" required>
+                </div>
+                
+                <div class="input-container">
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
+                </div>
+                
+                <div class="input-container">
+                    <input type="tel" id="phone" name="phone" placeholder="Phone number (optional)">
+                </div>
+                
+                <div class="disclaimer">
+                    <p>By creating an account, you agree to our <a href="#">Terms of Service</a> and acknowledge our <a href="#">Privacy Policy</a>.</p>
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="submit-button">Create Account</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Forgot Email Box -->
+        <div class="forgot-email-box hidden" id="forgotEmailBox">
+            <div class="header">
+                <div class="back-button" id="backToLoginFromForgotButton">←</div>
+                <h2>Find your email</h2>
+                <p>Enter your recovery phone number</p>
+            </div>
+            
+            <form id="forgotEmailForm">
+                <div class="input-container">
+                    <input type="tel" id="recoveryPhone" name="recoveryPhone" placeholder="Phone number" required>
+                </div>
+                
+                <div class="disclaimer">
+                    <p>We'll send a verification code to this number.</p>
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="submit-button">Next</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Forgot Password Box -->
+        <div class="forgot-email-box hidden" id="forgotPasswordBox">
+            <div class="header">
+                <div class="back-button" id="backToPasswordButton">←</div>
+                <h2>Reset your password</h2>
+                <p>Enter the email associated with your account</p>
+            </div>
+            
+            <form id="forgotPasswordForm">
+                <div class="input-container">
+                    <input type="email" id="recoveryEmail" name="recoveryEmail" placeholder="Email" required>
+                </div>
+                
+                <div class="disclaimer">
+                    <p>We'll send a password reset link to this email.</p>
+                </div>
+                
+                <div class="actions">
+                    <button type="submit" class="submit-button">Send reset link</button>
+                <a href="#" class="back-to-login hidden" id="backToLoginFromPasswordReset">Back to login</a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <div class="links">
+                <a href="#">Help</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all elements
+            const loginBox = document.getElementById('loginBox');
+            const passwordBox = document.getElementById('passwordBox');
+            const createAccountBox = document.getElementById('createAccountBox');
+            const forgotEmailBox = document.getElementById('forgotEmailBox');
+            const forgotPasswordBox = document.getElementById('forgotPasswordBox');
+            
+            const nextButton = document.getElementById('nextButton');
+            const backToEmailButton = document.getElementById('backToEmailButton');
+            const backToLoginFromCreateButton = document.getElementById('backToLoginFromCreateButton');
+            const backToLoginFromForgotButton = document.getElementById('backToLoginFromForgotButton');
+            const backToPasswordButton = document.getElementById('backToPasswordButton');
+            const backToLoginFromPasswordReset = document.getElementById('backToLoginFromPasswordReset');
+            
+            const createAccountLink = document.getElementById('createAccountLink');
+            const forgotEmailLink = document.getElementById('forgotEmailLink');
+            const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+            
+            const userEmail = document.getElementById('userEmail');
+            
+            // Login form to password form
+            nextButton.addEventListener('click', function() {
+                const email = document.getElementById('email').value;
+                if (email) {
+                    loginBox.classList.add('hidden');
+                    passwordBox.classList.remove('hidden');
+                    userEmail.textContent = email;
+                } else {
+                    alert('Please enter your email');
+                }
+            });
+            
+            // Password form back to login
+            backToEmailButton.addEventListener('click', function() {
+                passwordBox.classList.add('hidden');
+                loginBox.classList.remove('hidden');
+            });
+            
+            // Create account link
+            createAccountLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginBox.classList.add('hidden');
+                createAccountBox.classList.remove('hidden');
+            });
+            
+            // Back from create account to login
+            backToLoginFromCreateButton.addEventListener('click', function() {
+                createAccountBox.classList.add('hidden');
+                loginBox.classList.remove('hidden');
+            });
+            
+            // Forgot email link
+            forgotEmailLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginBox.classList.add('hidden');
+                forgotEmailBox.classList.remove('hidden');
+            });
+            
+            // Back from forgot email to login
+            backToLoginFromForgotButton.addEventListener('click', function() {
+                forgotEmailBox.classList.add('hidden');
+                loginBox.classList.remove('hidden');
+            });
+            
+            // Forgot password link
+            forgotPasswordLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                passwordBox.classList.add('hidden');
+                forgotPasswordBox.classList.remove('hidden');
+            });
+            
+            // Back from forgot password to password form
+            backToPasswordButton.addEventListener('click', function() {
+                forgotPasswordBox.classList.add('hidden');
+                passwordBox.classList.remove('hidden');
+            });
+            
+            // Back to login from password reset (after submission)
+            backToLoginFromPasswordReset.addEventListener('click', function(e) {
+                e.preventDefault();
+                forgotPasswordBox.classList.add('hidden');
+                loginBox.classList.remove('hidden');
+            });
+            
+            // Form submissions
+            document.getElementById('passwordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const password = document.getElementById('password').value;
+                
+                // In a real app, you would authenticate here
+                // For demo purposes, we'll just redirect if password is not empty
+                if (password) {
+                    // Redirect to dashboard.html upon successful login
+                    window.location.href = 'dashboard.html';
+                } else {
+                    alert('Please enter your password');
+                }
+            });
+            
+            document.getElementById('createAccountForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const password = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    alert("Passwords don't match!");
+                    return;
+                }
+                
+                // In a real app, you would create the account here
+                // For demo, redirect to dashboard after account creation
+                window.location.href = 'dashboard.html';
+            });
+            
+            document.getElementById('forgotEmailForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const phone = document.getElementById('recoveryPhone').value;
+                // In a real app, you would send recovery info here
+                alert(`Recovery code would be sent to ${phone}`);
+                // For demo, go back to login
+                forgotEmailBox.classList.add('hidden');
+                loginBox.classList.remove('hidden');
+            });
+            
+            document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('recoveryEmail').value;
+                // In a real app, you would send password reset here
+                alert(`Password reset link would be sent to ${email}`);
+                // Show back to login button
+                document.querySelector('#forgotPasswordForm .submit-button').textContent = 'Link sent!';
+                backToLoginFromPasswordReset.classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

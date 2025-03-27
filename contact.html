@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | SafeDrop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+    --primary: #4361ee;
+    --primary-light: #e6e9ff;
+    --primary-dark: #3a56d4;
+    --secondary: #4cc9f0;
+    --success: #4bb543;
+    --danger: #e63946;
+    --warning: #ff9f1c;
+    --text: #2b2d42;
+    --text-light: #8d99ae;
+    --light: #f8f9fa;
+    --white: #ffffff;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f5f7ff;
+    color: var(--text);
+    line-height: 1.6;
+}
+
+.container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: var(--white);
+    padding: 30px 20px;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo i {
+    font-size: 28px;
+}
+
+.logo img {
+    height: 50px;
+    width: auto;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+nav ul li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--text-light);
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+nav ul li a:hover {
+    color: var(--primary);
+    background-color: var(--primary-light);
+}
+
+nav ul li a i {
+    width: 24px;
+    text-align: center;
+}
+
+nav ul li.active a {
+    color: var(--primary);
+    background-color: var(--primary-light);
+    font-weight: 600;
+}
+
+.upgrade-card {
+    margin-top: auto;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 20px;
+    border-radius: var(--radius);
+    margin-bottom: 20px;
+}
+
+.upgrade-card h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.upgrade-card p {
+    font-size: 14px;
+    opacity: 0.9;
+    margin-bottom: 15px;
+}
+
+.upgrade-btn {
+    display: inline-block;
+    background: var(--white);
+    color: var(--primary);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.upgrade-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.highlight {
+    color: var(--primary);
+    position: relative;
+    display: inline-block;
+}
+
+.highlight::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: rgba(67, 97, 238, 0.2);
+    z-index: -1;
+    border-radius: 3px;
+}
+
+.subtitle {
+    color: var(--text-light);
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+/* Sections */
+.section {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.section.active {
+    display: block;
+}
+
+/* Upload Section */
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 0;
+    position: relative;
+}
+
+.upload-box {
+    width: 100%;
+    height: 240px;
+    border: 2px dashed var(--primary);
+    background: var(--primary-light);
+    text-align: center;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-box:hover {
+    background: rgba(67, 97, 238, 0.08);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+
+.upload-box.active {
+    background: rgba(67, 97, 238, 0.05);
+    border-color: var(--primary-dark);
+}
+
+.upload-box.uploaded {
+    border-color: var(--success);
+    background: rgba(75, 181, 67, 0.08);
+}
+
+.upload-content {
+    padding: 30px;
+    z-index: 2;
+    transition: var(--transition);
+}
+
+.upload-box.uploaded .upload-content {
+    transform: translateY(-20px);
+}
+
+.upload-icon {
+    font-size: 48px;
+    color: var(--primary);
+    margin-bottom: 15px;
+    transition: var(--transition);
+}
+
+.upload-box.uploaded .upload-icon {
+    color: var(--success);
+}
+
+.checkmark {
+    display: none;
+    font-size: 60px;
+    color: var(--success);
+    margin-bottom: 15px;
+    animation: checkmarkScale 0.5s cubic-bezier(0.42, 0, 0.58, 1.5);
+}
+
+.upload-box.uploaded .checkmark {
+    display: block;
+}
+
+.upload-box.uploaded .upload-icon {
+    display: none;
+}
+
+.drag-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+    transition: var(--transition);
+}
+
+.upload-box.uploaded .drag-text {
+    color: var(--success);
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.subtext {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.file-info {
+    margin-top: 15px;
+    font-weight: 500;
+    color: var(--primary-dark);
+    display: none;
+}
+
+.upload-btn {
+    margin-top: 25px;
+    padding: 12px 28px;
+    border: none;
+    background: var(--primary);
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.upload-btn:hover {
+    background: var(--primary-dark);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.upload-btn:disabled {
+    background: var(--text-light);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Contact Section */
+.contact-section {
+    max-width: 800px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+
+.contact-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.contact-card {
+    background: var(--light);
+    border-radius: var(--radius-sm);
+    padding: 25px;
+    transition: var(--transition);
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.contact-card i {
+    font-size: 24px;
+    color: var(--primary);
+    margin-bottom: 15px;
+}
+
+.contact-card h3 {
+    margin-bottom: 10px;
+}
+
+.contact-card p {
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.contact-card a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-form {
+    margin-top: 40px;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* Common Components */
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    box-shadow: var(--shadow-hover);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1px solid var(--primary);
+}
+
+.btn-outline:hover {
+    background: var(--primary-light);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 20px;
+    }
+    
+    .main-content {
+        padding: 30px 20px;
+        margin-left: 0;
+    }
+    
+    nav ul {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 10px;
+    }
+    
+    nav ul li a {
+        padding: 8px 12px;
+        white-space: nowrap;
+    }
+    
+    .upgrade-card {
+        margin-top: 20px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .contact-methods {
+        grid-template-columns: 1fr;
+    }
+}
+header {
+            padding: 20px 5%;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+            margin-top: 40px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .signup-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .signup-btn:hover {
+            background-color: var(--hover-blue);
+        }
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes checkmarkScale {
+    0% { transform: scale(0); opacity: 0; }
+    80% { transform: scale(1.2); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+}
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="logoblack.png" alt="SafeDrop Logo">
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="whysafedrop.html" class="why-link">Why SafeDrop</a>
+                <a href="solutions.html" class="solutions-link">Solutions</a>
+                <a href="pricing.html" class="pricing-link">Pricing</a>
+                <a href="about.html">About</a>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+       
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Contact <span class="highlight">SafeDrop</span> Support</h1>
+                <p class="subtitle">We're here to help you with any questions or issues</p>
+            </div>
+
+            <div class="contact-section">
+                <div class="contact-methods">
+                    <div class="contact-card">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email Us</h3>
+                        <p>For general inquiries and support</p>
+                        <a href="mailto:support@safedrop.com">support@safedrop.com</a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <i class="fas fa-phone-alt"></i>
+                        <h3>Call Us</h3>
+                        <p>Monday-Friday, 9am-5pm EST</p>
+                        <a href="tel:+18005551234">+91 9977882296</a>
+                    </div>
+                    
+                    <div class="contact-card">
+                        <i class="fas fa-comment-dots"></i>
+                        <h3>Live Chat</h3>
+                        <p>Instant help from our support team</p>
+                        <a href="#">Start Chat</a>
+                    </div>
+                </div>
+
+                <div class="contact-form">
+                    <h2><i class="fas fa-paper-plane"></i> Send us a message</h2>
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Your Name</label>
+                                <input type="text" id="name" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary submit-btn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

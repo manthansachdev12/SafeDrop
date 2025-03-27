@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Share | Upload & Share Files</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #e6e9ff;
+            --primary-dark: #3a56d4;
+            --secondary: #4cc9f0;
+            --success: #4bb543;
+            --danger: #e63946;
+            --warning: #ff9f1c;
+            --text: #2b2d42;
+            --text-light: #8d99ae;
+            --light: #f8f9fa;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--white);
+            padding: 30px 20px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 28px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        nav ul li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-light);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+            background-color: var(--primary-light);
+        }
+
+        nav ul li a i {
+            width: 24px;
+            text-align: center;
+        }
+
+        nav ul li.active a {
+            color: var(--primary);
+            background-color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .upgrade-card {
+            margin-top: auto;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        .upgrade-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .upgrade-card p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .upgrade-btn {
+            display: inline-block;
+            background: var(--white);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .upgrade-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: rgba(67, 97, 238, 0.2);
+            z-index: -1;
+            border-radius: 3px;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .upload-box {
+            width: 100%;
+            height: 240px;
+            border: 2px dashed var(--primary);
+            background: var(--primary-light);
+            text-align: center;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-box:hover {
+            background: rgba(67, 97, 238, 0.08);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-3px);
+        }
+
+        .upload-box.active {
+            background: rgba(67, 97, 238, 0.05);
+            border-color: var(--primary-dark);
+        }
+
+        .upload-box.uploaded {
+            border-color: var(--success);
+            background: rgba(75, 181, 67, 0.08);
+        }
+
+        .upload-content {
+            padding: 30px;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .upload-box.uploaded .upload-content {
+            transform: translateY(-20px);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+            transition: var(--transition);
+        }
+
+        .upload-box.uploaded .upload-icon {
+            color: var(--success);
+        }
+
+        .checkmark {
+            display: none;
+            font-size: 60px;
+            color: var(--success);
+            margin-bottom: 15px;
+            animation: checkmarkScale 0.5s cubic-bezier(0.42, 0, 0.58, 1.5);
+        }
+
+        .upload-box.uploaded .checkmark {
+            display: block;
+        }
+
+        .upload-box.uploaded .upload-icon {
+            display: none;
+        }
+
+        .drag-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+
+        .upload-box.uploaded .drag-text {
+            color: var(--success);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .subtext {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .file-info {
+            margin-top: 15px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            display: none;
+        }
+
+        .upload-btn {
+            margin-top: 25px;
+            padding: 12px 28px;
+            border: none;
+            background: var(--primary);
+            color: var(--white);
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upload-btn:hover {
+            background: var(--primary-dark);
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .upload-btn:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Share Section */
+        .share-section {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .share-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .share-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .file-preview {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .file-preview-icon {
+            font-size: 40px;
+            color: var(--primary);
+        }
+
+        .file-preview-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .file-preview-info p {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .share-options {
+            margin-bottom: 30px;
+        }
+
+        .share-options h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .option-card {
+            background: var(--light);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .option-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .option-card h4 i {
+            font-size: 20px;
+        }
+
+        .password-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--success);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .password-input {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .password-input.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .share-url {
+            margin-top: 25px;
+        }
+
+        .url-container {
+            display: flex;
+            margin-top: 10px;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+            font-family: inherit;
+            font-size: 14px;
+            background: var(--light);
+        }
+
+        .copy-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .share-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-light);
+        }
+
+        /* Files Section */
+        .files-section {
+            margin-top: 40px;
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--primary);
+        }
+
+        #fileList {
+            list-style: none;
+        }
+
+        #fileList li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        #fileList li:last-child {
+            border-bottom: none;
+        }
+
+        #fileList li:hover {
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .file-icon {
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .file-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .file-size {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .file-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+        }
+
+        .file-action-btn:hover {
+            color: var(--primary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+            }
+            
+            .main-content {
+                padding: 30px 20px;
+                margin-left: 0;
+            }
+            
+            nav ul {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            nav ul li a {
+                padding: 8px 12px;
+                white-space: nowrap;
+            }
+            
+            .upgrade-card {
+                margin-top: 20px;
+            }
+
+            .share-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes checkmarkScale {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out forwards;
+        }
+        .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo img {
+    height: 50px; /* Adjust size */
+    width: auto;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="logoblack.png">
+            </div>
+            <nav>
+                <ul>
+                    <li class="active" data-section="upload-section"><a href="#"><i class="fas fa-upload"></i> Upload</a></li>
+                    <li data-section="files-section"><a href="#"><i class="fas fa-folder"></i> My Files</a></li>
+                    <li><a href="#"><i class="fas fa-share-alt"></i> Shared</a></li>
+                    <li><a href="#"><i class="fas fa-trash"></i> Trash</a></li>
+                </ul>
+            </nav>
+            
+            <div class="upgrade-card">
+                <h3>Upgrade to Pro</h3>
+                <p>Get unlimited storage and advanced security options.</p>
+                <a href="upgradenow.html" class="upgrade-btn">Upgrade Now</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <div class="section active" id="upload-section">
+                <div class="header">
+                    <div>
+                        <h1>Start <span class="highlight">uploading</span> files and <span class="highlight">sharing</span> with ease</h1>
+                        <p class="subtitle">Drag and drop your files anywhere or click to browse</p>
+                    </div>
+                </div>
+
+                <div class="upload-section">
+                    <div class="upload-box" id="dropArea">
+                        <input type="file" id="fileInput" hidden>
+                        <div class="upload-content">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="checkmark">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <p class="drag-text">Drag & drop your file here</p>
+                            <p class="subtext">or click to browse files (Max Size: 10MB)</p>
+                            <p class="file-info" id="fileInfo"></p>
+                        </div>
+                    </div>
+                    <button class="upload-btn" id="uploadBtn" disabled>
+                        <i class="fas fa-upload"></i>
+                        Upload File
+                    </button>
+                </div>
+            </div>
+
+            <!-- Share Section -->
+            <div class="section" id="share-section">
+                <div class="share-section slide-up">
+                    <div class="share-header">
+                        <h2>Share Your File</h2>
+                    </div>
+                    
+                    <div class="file-preview">
+                        <i class="fas fa-file-alt file-preview-icon" id="share-file-icon"></i>
+                        <div class="file-preview-info">
+                            <h3 id="share-file-name">filename.ext</h3>
+                            <p id="share-file-size">0 KB</p>
+                        </div>
+                    </div>
+                    
+                    <div class="share-options">
+                        <h3>Sharing Options</h3>
+                        
+                        <div class="option-card">
+                            <h4><i class="fas fa-lock"></i> Password Protection</h4>
+                            <div class="password-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="password-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Enable password protection</span>
+                            </div>
+                            <div class="password-input" id="password-input">
+                                <div class="form-group">
+                                    <label for="file-password">Set a password</label>
+                                    <input type="password" id="file-password" class="form-control" placeholder="Enter password">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="option-card">
+                            <h4><i class="fas fa-envelope"></i> Share via Email</h4>
+                            <div class="form-group">
+                                <label for="recipient-email">Recipient's Email</label>
+                                <input type="email" id="recipient-email" class="form-control" placeholder="Enter email address">
+                            </div>
+                            <div class="form-group">
+                                <label for="email-message">Message (optional)</label>
+                                <textarea id="email-message" class="form-control" rows="3" placeholder="Add a message"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="share-url">
+                        <h3>Shareable Link</h3>
+                        <div class="url-container">
+                            <input type="text" id="share-url" class="url-input" readonly>
+                            <button class="copy-btn" id="copy-url">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="share-actions">
+                        <button class="btn btn-primary" id="send-email">
+                            <i class="fas fa-paper-plane"></i> Send Email
+                        </button>
+                        <button class="btn btn-outline" id="back-to-upload">
+                            <i class="fas fa-arrow-left"></i> Back to Upload
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Files Section -->
+            <div class="section" id="files-section">
+                <div class="files-section">
+                    <div class="section-header">
+                        <h2>My Files</h2>
+                        <button class="close-btn" id="close-files">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <ul id="fileList"></ul>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Email Sent Modal -->
+    <div class="modal" id="emailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Email Sent Successfully</h3>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Your file has been shared successfully via email.</p>
+                <div class="modal-actions" style="margin-top: 20px; text-align: right;">
+                    <button class="btn btn-primary" id="modal-ok">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // DOM Elements
+            const fileInput = document.getElementById("fileInput");
+            const dropArea = document.getElementById("dropArea");
+            const uploadBtn = document.getElementById("uploadBtn");
+            const fileInfo = document.getElementById("fileInfo");
+            const passwordToggle = document.getElementById("password-toggle");
+            const passwordInput = document.getElementById("password-input");
+            const shareUrl = document.getElementById("share-url");
+            const copyUrlBtn = document.getElementById("copy-url");
+            const sendEmailBtn = document.getElementById("send-email");
+            const backToUploadBtn = document.getElementById("back-to-upload");
+            const emailModal = document.getElementById("emailModal");
+            const closeModalBtn = document.getElementById("close-modal");
+            const modalOkBtn = document.getElementById("modal-ok");
+            const navItems = document.querySelectorAll('nav ul li');
+            const sections = document.querySelectorAll('.section');
+            
+            // File sharing elements
+            const shareFileName = document.getElementById("share-file-name");
+            const shareFileSize = document.getElementById("share-file-size");
+            const shareFileIcon = document.getElementById("share-file-icon");
+            
+            // State
+            let selectedFile = null;
+            let files = []; // Array to store uploaded files
+            
+            // Navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const sectionId = item.getAttribute('data-section');
+                    if (sectionId) {
+                        // Update active nav item
+                        navItems.forEach(navItem => navItem.classList.remove('active'));
+                        item.classList.add('active');
+                        
+                        // Show corresponding section
+                        sections.forEach(section => section.classList.remove('active'));
+                        document.getElementById(sectionId).classList.add('active');
+                    }
+                });
+            });
+            
+            // Handle click on upload box
+            dropArea.addEventListener("click", () => fileInput.click());
+            
+            // Handle file selection
+            fileInput.addEventListener("change", (event) => {
+                if (event.target.files.length > 0) {
+                    selectedFile = event.target.files[0];
+                    updateUploadBox();
+                }
+            });
+            
+            // Drag and drop functionality
+            ['dragover', 'dragenter'].forEach(eventName => {
+                dropArea.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    dropArea.classList.add('active');
+                });
+            });
+            
+            ['dragleave', 'dragend'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.remove('active');
+                });
+            });
+            
+            dropArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropArea.classList.remove('active');
+                
+                if (e.dataTransfer.files.length > 0) {
+                    selectedFile = e.dataTransfer.files[0];
+                    updateUploadBox();
+                }
+            });
+            
+            // Upload button event
+            uploadBtn.addEventListener("click", async () => {
+                if (!selectedFile) return;
+                
+                // Show loading state
+                uploadBtn.disabled = true;
+                uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                
+                // Simulate upload delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Add file to storage
+                const fileId = generateFileId();
+                files.unshift({
+                    id: fileId,
+                    name: selectedFile.name,
+                    size: selectedFile.size,
+                    type: selectedFile.type,
+                    date: new Date()
+                });
+                
+                // Show success animation
+                dropArea.classList.add('uploaded');
+                
+                // After showing success for 2 seconds, go to share section
+                setTimeout(() => {
+                    // Reset upload section
+                    selectedFile = null;
+                    fileInput.value = '';
+                    updateUploadBox();
+                    dropArea.classList.remove('uploaded');
+                    uploadBtn.disabled = false;
+                    uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload File';
+                    
+                    // Update share section with file info
+                    updateShareSection(fileId);
+                    
+                    // Switch to share section
+                    navItems.forEach(navItem => navItem.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    document.getElementById('share-section').classList.add('active');
+                }, 2000);
+            });
+            
+            // Password toggle
+            passwordToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    passwordInput.classList.add('show');
+                } else {
+                    passwordInput.classList.remove('show');
+                }
+            });
+            
+            // Copy URL button
+            copyUrlBtn.addEventListener('click', function() {
+                shareUrl.select();
+                document.execCommand('copy');
+                
+                // Change icon temporarily to indicate success
+                const icon = this.querySelector('i');
+                icon.classList.remove('fa-copy');
+                icon.classList.add('fa-check');
+                
+                setTimeout(() => {
+                    icon.classList.remove('fa-check');
+                    icon.classList.add('fa-copy');
+                }, 2000);
+            });
+            
+            // Send email button
+            sendEmailBtn.addEventListener('click', function() {
+                const email = document.getElementById('recipient-email').value;
+                if (!email) {
+                    alert('Please enter recipient email address');
+                    return;
+                }
+                
+                // Show loading
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                this.disabled = true;
+                
+                // Simulate email sending
+                setTimeout(() => {
+                    // Show success modal
+                    emailModal.classList.add('show');
+                    
+                    // Reset button
+                    this.innerHTML = '<i class="fas fa-paper-plane"></i> Send Email';
+                    this.disabled = false;
+                }, 1500);
+            });
+            
+            // Back to upload button
+            backToUploadBtn.addEventListener('click', function() {
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                sections.forEach(section => section.classList.remove('active'));
+                document.querySelector('nav ul li[data-section="upload-section"]').classList.add('active');
+                document.getElementById('upload-section').classList.add('active');
+            });
+            
+            // Close modal buttons
+            closeModalBtn.addEventListener('click', () => emailModal.classList.remove('show'));
+            modalOkBtn.addEventListener('click', () => emailModal.classList.remove('show'));
+            
+            // Update upload box
+            function updateUploadBox() {
+                if (selectedFile) {
+                    const fileSize = formatFileSize(selectedFile.size);
+                    fileInfo.innerHTML = `
+                        <strong>${selectedFile.name}</strong> (${fileSize})
+                    `;
+                    fileInfo.style.display = 'block';
+                    uploadBtn.disabled = false;
+                } else {
+                    fileInfo.style.display = 'none';
+                    uploadBtn.disabled = true;
+                }
+            }
+            
+            // Update share section with file info
+            function updateShareSection(fileId) {
+                const file = files.find(f => f.id === fileId);
+                if (!file) return;
+                
+                shareFileName.textContent = file.name;
+                shareFileSize.textContent = formatFileSize(file.size);
+                shareFileIcon.className = `fas ${getFileIcon(file.type)} file-preview-icon`;
+                
+                // Generate share URL
+                const baseUrl = `${window.location.origin}${window.location.pathname}`;
+                const shareableUrl = `${baseUrl}?file=${fileId}`;
+                shareUrl.value = shareableUrl;
+                
+                // Set password if enabled
+                if (passwordToggle.checked) {
+                    const password = document.getElementById('file-password').value;
+                    // In a real app, you would store this password with the file record
+                }
+            }
+            
+            // Generate unique file ID
+            function generateFileId() {
+                return 'file-' + Math.random().toString(36).substr(2, 9);
+            }
+            
+            // Format file size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+            
+            // Get appropriate file icon
+            function getFileIcon(fileType) {
+                if (!fileType) return 'fa-file';
+                
+                if (fileType.includes('image')) return 'fa-file-image';
+                if (fileType.includes('pdf')) return 'fa-file-pdf';
+                if (fileType.includes('word')) return 'fa-file-word';
+                if (fileType.includes('excel')) return 'fa-file-excel';
+                if (fileType.includes('zip') || fileType.includes('compressed')) return 'fa-file-archive';
+                if (fileType.includes('audio')) return 'fa-file-audio';
+                if (fileType.includes('video')) return 'fa-file-video';
+                
+                return 'fa-file';
+            }
+        });
+    </script>
+</body>
+</html>
